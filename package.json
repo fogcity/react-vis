@@ -1,0 +1,89 @@
+{
+  "name": "charts",
+  "version": "0.1.2",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "dev": "rollup -wc rollup.config.dev.js",
+    "build:dev": "rollup -c rollup.config.dev.js",
+    "build:prod": "npm run lint && npm run test && rollup -c rollup.config.prod.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "convert": "jss convert target.css -f json > target.json",
+    "lint": "eslint --fix --ext .ts,.tsx src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fogcity/charts.git"
+  },
+  "keywords": [
+    "react",
+    "charts",
+    "react-component"
+  ],
+  "author": {
+    "name": "trevor",
+    "email": "xymzhs@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fogcity/charts/issues"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "15 KB"
+    }
+  ],
+  "homepage": "https://github.com/fogcity/charts#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@size-limit/preset-small-lib": "^5.0.1",
+    "@testing-library/jest-dom": "^5.11.1",
+    "@testing-library/react": "^10.4.7",
+    "@types/d3": "^7.0.0",
+    "@types/jest": "^26.0.7",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "classnames": "^2.2.6",
+    "d3": "^7.0.4",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.5",
+    "jest": "^26.1.0",
+    "jss-cli": "^6.0.2",
+    "prettier": "^2.3.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-jss": "^10.7.1",
+    "rollup": "^2.53.3",
+    "rollup-plugin-filesize": "^9.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.3",
+    "size-limit": "^5.0.1",
+    "ts-jest": "^26.1.4",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5"
+  },
+  "peerDependencies": {
+    "d3": ">=7.0.4",
+    "react-jss": ">=10.7.1",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "resize-observer-polyfill": "^1.5.1"
+  }
+}
