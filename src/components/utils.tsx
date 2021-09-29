@@ -2,7 +2,9 @@ import { useEffect, useState, useRef } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
 export interface accessorPropsType<T> {
-  (datum: T, index?: number, array?: Iterable<T>): string | undefined | string
+  (d: T): number
+  (d: T): Date | d3.NumberValue
+  (datum: T, index?: number, array?: Iterable<T>): number | string | undefined
 }
 
 export function callAccessor<T>(accessor: accessorPropsType<T>, d: any, i: number) {
@@ -12,6 +14,7 @@ export type combineDimensionsPropsType = {
   boundedHeight: number
   boundedWidth: number
 } & dimensionsPropsType
+
 export type dimensionsPropsType = {
   height: number
   width: number
@@ -38,7 +41,7 @@ export const combineChartDimensions = (dimensions: dimensionsPropsType) => {
 }
 
 export const useChartDimensions = (passedSettings: dimensionsPropsType) => {
-  const ref = useRef()
+  const ref = useRef(null)
   const dimensions = combineChartDimensions(passedSettings)
 
   const [width, changeWidth] = useState(0)

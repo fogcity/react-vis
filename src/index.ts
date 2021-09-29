@@ -1,3 +1,3 @@
-import Timeline from './components/Timeline'
+import LineChart from './components/LineChart'
 
-export { Timeline }
+export { LineChart }

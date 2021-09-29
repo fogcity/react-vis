@@ -7,10 +7,15 @@ import classnames from 'classnames'
 
 const ChartContext = createContext({})
 export const useChartDimensions = () => useContext(ChartContext)
-type ChartPropTypes = { dimensions: dimensionsPropsType; children: React.ReactNode; className: string }
+type ChartPropTypes = { dimensions: dimensionsPropsType; children: React.ReactNode; className?: string }
 
 const useStyles = createUseStyles<'chart', {}, Theme>(theme => ({
-  chart: () => ({}),
+  chart: () => ({
+    overflow: 'visible',
+    '& > text': {
+      fill: '#95a5a6',
+    },
+  }),
 }))
 
 const Chart = ({ dimensions, children, className }: ChartPropTypes) => {
