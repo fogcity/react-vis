@@ -14,19 +14,19 @@ const axisComponentsByDimension = {
 
 const useStyles = createUseStyles<'axis', {}, Theme>(theme => ({
   axis: ({}) => ({
-    '& label': {
+    '& .label': {
       textAnchor: 'middle',
       fontSize: '0.9em',
       letterSpacing: '0.01em',
     },
-    '& tick': {
+    '& .tick': {
       fontSize: '0.8em',
       transition: 'all 0.3s ease-out',
     },
-    '& horizontal': {
+    '& .horizontal': {
       textAnchor: 'middle',
     },
-    '& vertical': {
+    '& .vertical': {
       dominantBaseline: 'middle',
       textAnchor: 'end',
     },
@@ -39,7 +39,7 @@ type AxisPropsTypes = {
   label?: string
   ticksColor?: string
   axisTicks?: { x: number; y: number }
-  formatTick?: (date: Date) => string
+  formatTick?: { x: (d: any) => any; y: (d: any) => any }
   className?: string
 }
 
@@ -48,7 +48,7 @@ const Axis = ({
   lineColor = 'black',
   ticksColor,
   axisTicks,
-  formatTick = d3.format(','),
+  formatTick,
   className,
   ...props
 }: AxisPropsTypes) => {
@@ -64,7 +64,7 @@ const Axis = ({
       ticksColor={ticksColor}
       numberOfTicks={axisTicks?.[dimension]}
       dimensions={dimensions as combineDimensionsPropsType}
-      formatTick={formatTick}
+      formatTick={formatTick?.[dimension]}
       {...props}
     />
   )
@@ -78,7 +78,7 @@ type AxisHorizontalPropsTypes = {
   lineColor?: string
   dimensions: combineDimensionsPropsType
   label?: string
-  formatTick?: any
+  formatTick?: (d: any) => any
   scale: any
   className?: string
 }
@@ -104,7 +104,7 @@ function AxisHorizontal({
 
       {ticks.map((tick: React.Key | null | undefined) => (
         <text key={tick} className={classnames('tick', 'horizontal')} transform={`translate(${scale(tick)}, 25)`}>
-          {formatTick(tick)}
+          {formatTick ? formatTick(tick) : tick}
         </text>
       ))}
 
@@ -122,7 +122,7 @@ type AxisVerticalPropsTypes = {
   lineColor?: string
   dimensions: combineDimensionsPropsType
   label?: string
-  formatTick?: any
+  formatTick?: (d: any) => any
   scale: any
   className?: string
 }
@@ -137,7 +137,6 @@ function AxisVertical({
   ...props
 }: AxisVerticalPropsTypes) {
   const autoNumberOfTicks = dimensions.boundedHeight / 70
-
   const ticks = scale.ticks(numberOfTicks || autoNumberOfTicks)
 
   return (
@@ -146,7 +145,7 @@ function AxisVertical({
 
       {ticks.map((tick: React.Key | null | undefined, i: any) => (
         <text key={tick} className={classnames('tick', 'vertical')} transform={`translate(-16, ${scale(tick)})`}>
-          {formatTick(tick)}
+          {formatTick ? formatTick(tick) : tick}
         </text>
       ))}
 

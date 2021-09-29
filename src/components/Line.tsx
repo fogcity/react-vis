@@ -14,9 +14,11 @@ type LinePropsTypes = {
   xAccessor: accessorPropsType<any>
   y0Accessor?: accessorPropsType<any>
   interpolation?: CurveFactory
+  className?: string
 }
 const useStyles = createUseStyles<'line', Pick<LinePropsTypes, 'color'>, Theme>(theme => ({
   line: ({ color }) => ({
+    fill: 'none',
     stroke: color,
     transition: 'all 0.3s ease-out',
   }),
@@ -31,7 +33,9 @@ const Line = ({
   interpolation = d3.curveMonotoneX,
   className,
   ...props
-}: LinePropsTypes & React.ComponentPropsWithoutRef<'path'>) => {
+}: LinePropsTypes) => {
+  console.log(data)
+
   const lineGenerator = (d3[type]() as any).x(xAccessor).y(yAccessor).curve(interpolation)
   const classes = useStyles({ color })
   if (type === 'area') {

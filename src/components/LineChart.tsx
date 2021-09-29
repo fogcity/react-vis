@@ -4,17 +4,23 @@ import Chart from './Chart'
 import Line from './Line'
 import Axis from './Axis'
 import { useChartDimensions, accessorPropsType } from './utils'
+import Circles from './Circles'
 
 type LineChartPropsTypes = {
   width: number
   height: number
-  data: any[]
+  data?: any[]
+  multipleData?: { pointColor: string; lineColor?: string; radius?: any; data: any[] }[]
   xAccessor: accessorPropsType<any>
   yAccessor: accessorPropsType<any>
   label?: string
   color?: string
   children?: React.ReactNode
   axisTicks?: { x: number; y: number }
+  formatTick?: { x: (d: any) => any; y: (d: any) => any }
+  point?: boolean
+
+  multiple?: boolean
 }
 const LineChart = ({
   axisTicks,
@@ -22,29 +28,50 @@ const LineChart = ({
   label,
   width,
   height,
+  multiple,
+  multipleData,
   children,
+  point,
   color,
-  xAccessor = (d: any) => d.x,
-  yAccessor = (d: any) => d.y,
+  formatTick,
+  xAccessor,
+  yAccessor,
 }: LineChartPropsTypes) => {
   const [ref, dimensions] = useChartDimensions({ width, height })
 
   const typedDimensions = dimensions as any
+  console.log('multipleData[0]', multipleData?.[0].data)
 
-  const xScale = d3
-    .scaleTime()
-    .domain(d3.extent(data, xAccessor) as [any, any])
-    .range([0, typedDimensions.boundedWidth])
-    .nice()
+  const xScale = multipleData
+    ? d3
+        .scaleLinear()
+        .domain(d3.extent(multipleData[0].data, xAccessor) as [any, any])
+        .range([0, typedDimensions.boundedWidth])
+    : d3
+        .scaleLinear()
+        .domain(d3.extent(data, xAccessor) as [any, any])
+        .range([0, typedDimensions.boundedWidth])
 
-  const yScale = d3
-    .scaleLinear()
-    .domain(d3.extent(data, yAccessor) as [any, any])
-    .range([typedDimensions.boundedHeight, 0])
-    .nice()
+  const yScale = multipleData
+    ? d3
+        .scaleLinear()
+        .domain(d3.extent(multipleData[0].data, yAccessor) as [any, any])
+        .range([typedDimensions.boundedHeight, 0])
+    : d3
+        .scaleLinear()
+        .domain(d3.extent(data, yAccessor) as [any, any])
+        .range([typedDimensions.boundedHeight, 0])
+        .nice()
 
-  const xAccessorScaled = (d: any) => xScale(xAccessor(d))
-  const yAccessorScaled = (d: any) => yScale(yAccessor(d))
+  const xAccessorScaled = (d: any) => {
+    return xScale(xAccessor(d))
+  }
+  const yAccessorScaled = (d: any) => {
+    console.log('yAccessor(d)', yAccessor(d))
+    console.log(yScale(yAccessor(d)))
+
+    return yScale(yAccessor(d))
+  }
 
   return (
     <div
@@ -55,9 +82,32 @@ const LineChart = ({
       }}
       ref={ref as React.MutableRefObject<null>}>
       <Chart dimensions={typedDimensions}>
-        <Axis dimension='x' axisTicks={axisTicks} scale={xScale} />
-        <Axis dimension='y' axisTicks={axisTicks} scale={yScale} label={label} />
-        {children || <Line color={color} data={data} xAccessor={xAccessorScaled} yAccessor={yAccessorScaled} />}
+        <Axis dimension='x' axisTicks={axisTicks} scale={xScale} formatTick={formatTick} />
+        <Axis dimension='y' axisTicks={axisTicks} scale={yScale} formatTick={formatTick} label={label} />
+        {multiple ? (
+          multipleData &&
+          multipleData.map(v => (
+            <Line color={v.lineColor} data={v.data} xAccessor={xAccessorScaled} yAccessor={yAccessorScaled} />
+          ))
+        ) : (
+          <Line color={color} data={data} xAccessor={xAccessorScaled} yAccessor={yAccessorScaled} />
+        )}
+
+        {point &&
+          (multiple ? (
+            multipleData &&
+            multipleData.map(v => (
+              <Circles
+                color={v.pointColor}
+                radius={v.radius}
+                data={v.data}
+                xAccessor={xAccessorScaled}
+                yAccessor={yAccessorScaled}
+              />
+            ))
+          ) : (
+            <Circles radius={2} data={data} xAccessor={xAccessorScaled} yAccessor={yAccessorScaled} />
+          ))}
       </Chart>
     </div>
   )
