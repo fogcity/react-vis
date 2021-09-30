@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import Chart from './Chart'
 import Line from './Line'
 import Axis from './Axis'
+import AxisNaive from './AxisNaive'
 import { useChartDimensions, accessorPropsType } from './utils'
 import Circles from './Circles'
 
@@ -67,9 +68,6 @@ const LineChart = ({
     return xScale(xAccessor(d))
   }
   const yAccessorScaled = (d: any) => {
-    console.log('yAccessor(d)', yAccessor(d))
-    console.log(yScale(yAccessor(d)))
-
     return yScale(yAccessor(d))
   }
 
@@ -82,8 +80,10 @@ const LineChart = ({
       }}
       ref={ref as React.MutableRefObject<null>}>
       <Chart dimensions={typedDimensions}>
-        <Axis dimension='x' axisTicks={axisTicks} scale={xScale} formatTick={formatTick} />
-        <Axis dimension='y' axisTicks={axisTicks} scale={yScale} formatTick={formatTick} label={label} />
+        <AxisNaive dimension='x' scale={xScale} formatTick={formatTick} />
+        <AxisNaive dimension='y' scale={yScale} formatTick={formatTick} />
+        {/* <Axis dimension='x' axisTicks={axisTicks} scale={xScale} formatTick={formatTick} />
+        <Axis dimension='y' axisTicks={axisTicks} scale={yScale} formatTick={formatTick} label={label} /> */}
         {multiple ? (
           multipleData &&
           multipleData.map(v => (

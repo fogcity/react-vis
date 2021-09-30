@@ -16,7 +16,7 @@ const mulData = [
   { pointColor: 'blue', lineColor: 'blue', radius: 2, data: getDatas() },
   { pointColor: 'red', lineColor: 'red', radius: 2, data: getDatas() },
 ]
-console.log(mulData)
+
 const Main = () => {
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', margin: '-0.5em' }}>

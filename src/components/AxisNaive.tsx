@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import PropTypes from 'prop-types'
 import d3, { AxisScale } from 'd3'
 import { useChartDimensions } from './Chart'
 import { combineDimensionsPropsType } from './utils'
